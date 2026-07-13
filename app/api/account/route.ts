@@ -2,18 +2,18 @@
 import { prisma } from '../../../lib/prisma';
 import { NextResponse } from 'next/server';
 
-// Alaina ny account miaraka amin'ny transactions rehetra
+// Alaina ny account miaraka amin'ny accounttransaction rehetra
 export async function GET() {
   try {
     let account = await prisma.useraccount.findUnique({ 
       where: { id: 1 },
-      include: { transactions: true } // Ampidirina ny dépôt/retrait
+      include: { accounttransaction: true } // Novana hifanaraka amin'ny schema
     });
 
     if (!account) {
       account = await prisma.useraccount.create({
         data: { id: 1, initialCapital: 1000 },
-        include: { transactions: true }
+        include: { accounttransaction: true }
       });
     }
     return NextResponse.json(account);
@@ -32,15 +32,15 @@ export async function PUT(req: Request) {
       const updated = await prisma.useraccount.update({
         where: { id: 1 },
         data: { initialCapital: parseFloat(body.amount) },
-        include: { transactions: true }
+        include: { accounttransaction: true }
       });
       return NextResponse.json(updated);
     }
 
     // CAS 2: Fampidirana Transaction vaovao (DEPOT na RETRAIT)
     if (body.action === 'ADD_TRANSACTION') {
-      // 1. Mamorona transaction vaovao
-      await prisma.accountTransaction.create({
+      // 1. Mamorona transaction vaovao (litera kely koa ny accounttransaction)
+      await prisma.accounttransaction.create({
         data: {
           accountId: 1,
           type: body.type, // "DEPOT" na "RETRAIT"
@@ -51,7 +51,7 @@ export async function PUT(req: Request) {
       // 2. Alaina ny account vaovao efa nohavaozina
       const updatedAccount = await prisma.useraccount.findUnique({
         where: { id: 1 },
-        include: { transactions: true }
+        include: { accounttransaction: true }
       });
 
       return NextResponse.json(updatedAccount);
