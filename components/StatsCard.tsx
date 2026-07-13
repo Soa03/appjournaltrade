@@ -1,5 +1,6 @@
+// components/StatsCard.tsx
 import { LucideIcon, Settings, BarChart3, Calculator } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import Link from 'next/link';
 
 interface StatsCardProps {
@@ -22,7 +23,8 @@ const containerVariants = {
   }
 };
 
-const buttonVariants = {
+// Nampiana karazana Variants mba tsy hisy fahadisoana TypeScript ao amin'ny Vercel
+const buttonVariants: Variants = {
   initial: { 
     opacity: 0, 
     y: 15,        // Avy any ambany kokoa izy no miakatra
