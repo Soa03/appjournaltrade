@@ -31,7 +31,7 @@ export const TradeTable = ({ trades, onSelect, onDelete, onEdit }: TradeTablePro
   const filteredTrades = trades.filter((t) => {
     const matchesPair = t.pair.toLowerCase().includes(searchPair.toLowerCase());
     const matchesDate = filterDate ? t.date.startsWith(filterDate) : true;
-    const matchesStatus = filterStatus === 'ALL' ? true : t.status === filterStatus;
+    const matchesStatus = filterStatus === 'ALL' ? true : (t.status as string) === filterStatus;
     return matchesPair && matchesDate && matchesStatus;
   });
 
@@ -53,8 +53,8 @@ export const TradeTable = ({ trades, onSelect, onDelete, onEdit }: TradeTablePro
 
   // Function mibaiko ny lokon'ny PnL ($)
   const getPnLClass = (status: string, pnlValue: any) => {
-    if (status === 'Pending') return 'text-slate-600';
-    if (status === 'BE') return 'text-white/60'; // Loko neutre rehefa Break Even
+    if ((status as string) === 'Pending') return 'text-slate-600';
+    if ((status as string) === 'BE') return 'text-white/60'; // Loko neutre rehefa Break Even
     
     // Raha tsy Pending na BE dia miankina amin'ny sanda (Win na Loss)
     const pnlNum = Number(pnlValue);
@@ -146,9 +146,9 @@ export const TradeTable = ({ trades, onSelect, onDelete, onEdit }: TradeTablePro
                       {t.status}
                     </div>
                   </td>
-                  {/* Nampiana ny fepetra getPnLClass eto */}
+                  {/* Voahitsy eto ny t.status mba hampiasa as string */}
                   <td className={`py-4 px-4 text-right font-black font-mono text-xl ${getPnLClass(t.status, t.pnl)}`}>
-                    {t.status === 'Pending' ? '---' : `${Number(t.pnl) > 0 ? `+${t.pnl}` : t.pnl}$`}
+                    {((t.status as string) === 'Pending') ? '---' : `${Number(t.pnl) > 0 ? `+${t.pnl}` : t.pnl}$`}
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex items-center justify-center gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
