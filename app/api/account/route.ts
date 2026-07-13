@@ -5,13 +5,13 @@ import { NextResponse } from 'next/server';
 // Alaina ny account miaraka amin'ny transactions rehetra
 export async function GET() {
   try {
-    let account = await prisma.userAccount.findUnique({ 
+    let account = await prisma.useraccount.findUnique({ 
       where: { id: 1 },
       include: { transactions: true } // Ampidirina ny dépôt/retrait
     });
 
     if (!account) {
-      account = await prisma.userAccount.create({
+      account = await prisma.useraccount.create({
         data: { id: 1, initialCapital: 1000 },
         include: { transactions: true }
       });
@@ -29,7 +29,7 @@ export async function PUT(req: Request) {
     
     // CAS 1: Fanovana ny Capital Initial tsotra
     if (body.action === 'UPDATE_CAPITAL') {
-      const updated = await prisma.userAccount.update({
+      const updated = await prisma.useraccount.update({
         where: { id: 1 },
         data: { initialCapital: parseFloat(body.amount) },
         include: { transactions: true }
@@ -49,7 +49,7 @@ export async function PUT(req: Request) {
       });
 
       // 2. Alaina ny account vaovao efa nohavaozina
-      const updatedAccount = await prisma.userAccount.findUnique({
+      const updatedAccount = await prisma.useraccount.findUnique({
         where: { id: 1 },
         include: { transactions: true }
       });
