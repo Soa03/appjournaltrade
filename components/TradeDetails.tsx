@@ -172,7 +172,7 @@ export const TradeDetails = ({ trade, onClose, onUpdateImage }: TradeDetailsProp
         <div className="sticky top-0 bg-[#0f172a]/80 backdrop-blur-xl p-6 border-b border-white/5 flex justify-between items-center z-30">
           <div className="flex items-center gap-5">
             <div className={`p-4 rounded-2xl border ${getStatusStyle(trade.status)}`}>
-              {trade.status === 'Pending' ? <Clock size={24} /> : <Activity size={24} />}
+              {((trade.status as string) === 'Pending') ? <Clock size={24} /> : <Activity size={24} />}
             </div>
             <div>
               <h2 className="text-3xl font-black text-white tracking-tighter uppercase italic flex items-center gap-3">
