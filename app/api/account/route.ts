@@ -5,13 +5,16 @@ import { NextResponse } from 'next/server';
 // Alaina ny account miaraka amin'ny accounttransaction rehetra
 export async function GET() {
   try {
-    let account = await prisma.useraccount.findUnique({ 
+    // Ampiasaina ny 'any' mba hialana amin'ny blockage-n'ny TypeScript type generation ao amin'ny Vercel
+    const client = prisma as any;
+
+    let account = await client.useraccount.findUnique({ 
       where: { id: 1 },
-      include: { accounttransaction: true } // Novana hifanaraka amin'ny schema
+      include: { accounttransaction: true }
     });
 
     if (!account) {
-      account = await prisma.useraccount.create({
+      account = await client.useraccount.create({
         data: { id: 1, initialCapital: 1000 },
         include: { accounttransaction: true }
       });
@@ -26,10 +29,11 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
+    const client = prisma as any;
     
     // CAS 1: Fanovana ny Capital Initial tsotra
     if (body.action === 'UPDATE_CAPITAL') {
-      const updated = await prisma.useraccount.update({
+      const updated = await client.useraccount.update({
         where: { id: 1 },
         data: { initialCapital: parseFloat(body.amount) },
         include: { accounttransaction: true }
@@ -39,8 +43,7 @@ export async function PUT(req: Request) {
 
     // CAS 2: Fampidirana Transaction vaovao (DEPOT na RETRAIT)
     if (body.action === 'ADD_TRANSACTION') {
-      // 1. Mamorona transaction vaovao (litera kely koa ny accounttransaction)
-      await prisma.accounttransaction.create({
+      await client.accounttransaction.create({
         data: {
           accountId: 1,
           type: body.type, // "DEPOT" na "RETRAIT"
@@ -48,8 +51,7 @@ export async function PUT(req: Request) {
         }
       });
 
-      // 2. Alaina ny account vaovao efa nohavaozina
-      const updatedAccount = await prisma.useraccount.findUnique({
+      const updatedAccount = await client.useraccount.findUnique({
         where: { id: 1 },
         include: { accounttransaction: true }
       });
