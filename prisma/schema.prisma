@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model accounttransaction {
+  id          String      @id @default(cuid())
+  accountId   Int         @default(1)
+  type        String
+  amount      Float
+  date        DateTime    @default(now())
+  useraccount useraccount @relation(fields: [accountId], references: [id], onDelete: Cascade, map: "AccountTransaction_accountId_fkey")
+
+  @@index([accountId], map: "AccountTransaction_accountId_fkey")
+}
+
+model trade {
+  id          String   @id @default(cuid())
+  date        DateTime @default(now())
+  pair        String
+  type        String
+  status      String
+  entryPrice  String?
+  stopLoss    String?
+  takeProfit  String?
+  lots        String
+  pnl         String
+  dailyBias   String?  @db.Text
+  analysisH1  String?  @db.Text
+  analysisLTF String?  @db.Text
+  imgH1       String?  @db.LongText
+  imgLTF      String?  @db.LongText
+  imgM1       String?  @db.LongText
+  imgExtra1   String?  @db.LongText
+  imgExtra2   String?  @db.LongText
+  comment     String?  @db.Text
+  error       String?  @db.Text
+  session     String?
+}
+
+model useraccount {
+  id                 Int                  @id @default(1)
+  initialCapital     Float                @default(1000)
+  accounttransaction accounttransaction[]
+}

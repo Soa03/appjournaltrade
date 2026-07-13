@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100vh;
+  overflow: hidden; 
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(circle at top right, #3d2b1f, #1e1510),
+              linear-gradient(135deg, #1e1510 0%, #2a1d15 50%, #120c08 100%);
+  background-attachment: fixed;
+  color: #fdfbf9;
+}
+
+/* --- ANIMATION BORDER LUMINEUX --- */
+@keyframes borderRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animated-border-box {
+  position: relative;
+  overflow: hidden;
+  padding: 2px;
+  border-radius: 2.1rem;
+  background: #0a0a0b;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.animated-border-box::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(#06b6d4, #0a0a0b, #f43f5e, #0a0a0b, #06b6d4);
+  animation: borderRotate 4s linear infinite;
+  top: -50%;
+  left: -50%;
+}
+
+.inner-content {
+  position: relative;
+  background: #0a0a0b;
+  border-radius: 2rem;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+}
+
+/* --- HOVER EFFECT --- */
+.trade-row {
+  transition: all 0.2s ease;
+}
+
+.trade-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateX(3px);
+}
+
+.pnl-glow-positive {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+  border: 1px solid rgba(6, 182, 212, 0.3) !important;
+}
+
+/* --- SCROLLBAR VERTICAL (Mitsangana) --- */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 10px; 
+}
+
+/* --- MASAKAFO: MANALA NY LIGNE AMBANY (Horizontal Scrollbar) --- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Brave */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE sy Edge */
+  scrollbar-width: none;  /* Firefox */
+}
